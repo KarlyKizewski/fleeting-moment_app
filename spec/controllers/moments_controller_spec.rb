@@ -1,6 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe MomentsController, type: :controller do
+  describe "moments#show action" do
+    it "shoud successfully show the page if the moment is found" do
+      moment = FactoryBot.create(:moment)
+      get :show, params: { id: moment.id }
+      expect(response).to have_http_status(:success)
+    end
+
+    it "should return a 404 error if the moment is not found" do
+      get :show, params: { id: 'TACOCAT' }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+
   describe "moments#index action" do
     it "should successfully show the page" do
       get :index
