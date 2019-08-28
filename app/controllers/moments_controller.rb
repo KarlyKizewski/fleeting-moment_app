@@ -1,4 +1,5 @@
 class MomentsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create]
   
   def new
     @moment = Moment.new
@@ -8,7 +9,7 @@ class MomentsController < ApplicationController
   end
 
   def create
-    @moment = Moment.create(moment_params)
+    @moment = current_user.moments.create(moment_params)
     if @moment.valid?
       redirect_to root_path
     else
