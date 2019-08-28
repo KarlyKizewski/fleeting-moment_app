@@ -23,5 +23,11 @@ RSpec.describe MomentsController, type: :controller do
       moment = Moment.last
       expect(moment.message).to eq("Hello!")
     end
+
+    it "should properly deal with validation errors" do
+      post :create, params: { moment: { message: '' } }
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(Moment.count).to eq 0
+    end
   end
 end

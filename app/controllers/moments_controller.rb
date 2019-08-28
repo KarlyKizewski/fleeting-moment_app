@@ -9,7 +9,11 @@ class MomentsController < ApplicationController
 
   def create
     @moment = Moment.create(moment_params)
-    redirect_to root_path
+    if @moment.valid?
+      redirect_to root_path
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   private
