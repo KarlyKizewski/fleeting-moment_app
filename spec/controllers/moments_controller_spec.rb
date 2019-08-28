@@ -14,11 +14,7 @@ RSpec.describe MomentsController, type: :controller do
       expect(response).to redirect_to new_user_session_path
     end
     it "should successfully show the new form" do
-      user = User.create(
-        email: 'dollymeats@gmail.com',
-        password: 'hello5',
-        password_confirmation: 'hello5'
-      )
+      user = FactoryBot.create(:user)
       sign_in user
 
       get :new
@@ -34,11 +30,7 @@ RSpec.describe MomentsController, type: :controller do
     end
 
     it "should successfully create a moment in our database" do
-      user = User.create(
-        email: 'dollymeats@gmail.com',
-        password: 'hello5',
-        password_confirmation: 'hello5'
-      )
+      user = FactoryBot.create(:user)
       sign_in user
 
       post :create, params: { moment: { message: 'Hello!' } }
@@ -50,11 +42,7 @@ RSpec.describe MomentsController, type: :controller do
     end
 
     it "should properly deal with validation errors" do
-      user = User.create(
-        email: 'dollymeats@gmail.com',
-        password: 'hello5',
-        password_confirmation: 'hello5'
-      )
+      user = FactoryBot.create(:user)
       sign_in user
 
       post :create, params: { moment: { message: '' } }
