@@ -2,13 +2,16 @@ require 'rails_helper'
 
 RSpec.describe MomentsController, type: :controller do
 
-  describe "grams#edit action" do
-    it "should succesfully show the edit form if the gram is found" do
-
+  describe "moments#edit action" do
+    it "should succesfully show the edit form if the moment is found" do
+      moment = FactoryBot.create(:moment)
+      get :edit, params: { id: moment.id }
+      expect(response).to have_http_status(:success)
     end
 
-    it "should return a 404 error message if the gram is not found" do
-
+    it "should return a 404 error message if the moment is not found" do
+      get :edit, params: { id: 'SWAG' }
+      expect(response).to have_http_status(:not_found)
     end
   end
 
