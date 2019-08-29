@@ -10,16 +10,12 @@ class MomentsController < ApplicationController
 
   def show
     @moment = Moment.find_by_id(params[:id])
-    if @moment.blank?
-      render plain: 'Not Found', status: :not_found
-    end
+    return render_not_found if @moment.blank? 
   end
 
   def edit
     @moment = Moment.find_by_id(params[:id])
-    if @moment.blank?
-      render plain: 'Not Found', status: :not_found
-    end
+    return render_not_found if @moment.blank? 
   end
 
   def create
@@ -31,9 +27,24 @@ class MomentsController < ApplicationController
     end
   end
 
+  def update
+    @moment = Moment.find_by_id(params[:id])
+    return render_not_found if @moment.blank?
+    @moment.update_attributes(moment_params)
+    if @moment.valid?
+      redirect_to root_path
+    else
+      return render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def moment_params
     params.require(:moment).permit(:message)
+  end
+
+  def render_not_found
+    render plain: 'Not found', status: :not_found
   end
 end

@@ -2,6 +2,29 @@ require 'rails_helper'
 
 RSpec.describe MomentsController, type: :controller do
 
+  describe "moments#update action" do
+    it "should allow users to successfully update moments" do
+      moment = FactoryBot.create(:moment, message: "Initial Value")
+      patch :update, params: { id: moment.id, moment: { message: 'Changed' } }
+      expect(response).to redirect_to root_path
+      moment.reload
+      expect(moment.message).to eq "Changed"
+    end
+
+    it "should have http 404 error if the gram cannot be found" do
+      patch :update, params: { id: 'YOLOSWAG', moment: { message: 'Changed' } }
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "should render the edit form with an http status of unprocessable_entity" do
+      moment = FactoryBot.create(:moment, message: "Initial Value")
+      patch :update, params: { id: moment.id, moment: { message: '' } }
+      expect(response).to have_http_status(:unprocessable_entity)
+      moment.reload
+      expect(moment.message).to eq "Initial Value"
+    end
+  end
+
   describe "moments#edit action" do
     it "should succesfully show the edit form if the moment is found" do
       moment = FactoryBot.create(:moment)
