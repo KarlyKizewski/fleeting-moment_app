@@ -1,5 +1,5 @@
 class MomentsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit]
+  before_action :authenticate_user!, only: [:new, :create]
 
   def new
     @moment = Moment.new
@@ -17,9 +17,7 @@ class MomentsController < ApplicationController
 
   def edit
     @moment = Moment.find_by_id(params[:id])
-    if @moment.valid?
-      redirect_to root_path
-    elsif @moment.blank?
+    if @moment.blank?
       render plain: 'Not Found', status: :not_found
     end
   end
