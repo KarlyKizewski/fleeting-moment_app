@@ -1,1 +1,10 @@
 <h1>Moments!</h1>
+
+<% @moments.each do |moment| %>
+  <div>
+    <% unless moment.picture.url.nil? %>
+      <%= image_tag moment.picture.url %>
+    <% end %>
+    <%= moment.message %>
+  </div>
+<% end %>

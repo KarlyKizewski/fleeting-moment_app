@@ -6,6 +6,7 @@ class MomentsController < ApplicationController
   end
 
   def index
+    @moments = Moment.all
   end
 
   def show
@@ -51,7 +52,7 @@ class MomentsController < ApplicationController
   private
 
   def moment_params
-    params.require(:moment).permit(:message)
+    params.require(:moment).permit(:message, :picture)
   end
 
   def render_not_found
