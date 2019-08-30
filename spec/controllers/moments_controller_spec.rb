@@ -2,6 +2,21 @@ require 'rails_helper'
 
 RSpec.describe MomentsController, type: :controller do
 
+  describe "moments#destroy action" do
+    it "should allow a user to destroy moments" do
+      moment = FactoryBot.create(:moment)
+      delete :destroy, params: { id: moment.id }
+      expect(response).to redirect_to root_path
+      moment = Moment.find_by_id(moment.id)
+      expect(moment).to eq nil
+    end
+
+    it "should return a 404 message if we cannot find a moment with the id that is specified" do
+      delete :destroy, params: { id: 'SPACEDUCK' }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "moments#update action" do
     it "should allow users to successfully update moments" do
       moment = FactoryBot.create(:moment, message: "Initial Value")

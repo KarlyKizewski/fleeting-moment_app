@@ -38,6 +38,13 @@ class MomentsController < ApplicationController
     end
   end
 
+  def destroy
+    @moment = Moment.find_by_id(params[:id])
+    return render_not_found if @moment.blank?
+    @moment.destroy
+    redirect_to root_path
+  end
+
   private
 
   def moment_params
