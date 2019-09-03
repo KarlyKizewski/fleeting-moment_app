@@ -150,10 +150,8 @@ RSpec.describe MomentsController, type: :controller do
     it "should successfully create a moment in our database" do
       user = FactoryBot.create(:user)
       sign_in user
-
       post :create, params: { moment: { message: 'Hello!' } }
       expect(response).to redirect_to root_path
-
       moment = Moment.last
       expect(moment.message).to eq("Hello!")
       expect(moment.user).to eq(user)
