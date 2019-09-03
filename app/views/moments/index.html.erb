@@ -1,10 +1,46 @@
-<h1>Moments!</h1>
+<br />
+<div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
+  <% @moments.each do |moment| %>
+  <div class="card">
+    <div class="handle"><%= moment.user.email %></div>
+      <% unless moment.picture.url.nil? %>
+        <%= image_tag moment.picture.url, class: 'img-fluid' %>
+      <% end %>
+      
+      <p>
+          <%= moment.message %>
+      </p>
 
-<% @moments.each do |moment| %>
-  <div>
-    <% unless moment.picture.url.nil? %>
-      <%= image_tag moment.picture.url %>
-    <% end %>
-    <%= moment.message %>
-  </div>
-<% end %>
+      <div class="moment-actions float-right">
+        <% if current_user && current_user == moment.user %>
+          <%= link_to 'Edit', edit_moment_path(moment) %>
+          <%= link_to 'Destroy', moment_path(moment), method: :delete, data: {confirm: 'Are you sure?'} %>
+        <% end %>
+      </div>
+
+      <br class="clear-fix" />
+
+      <div class="comments">
+        <h3>Comments</h3>
+
+        <% moment.comments.each do |comment| %>
+          <div class="comment">
+            <span class="comment_handle">
+              <%= comment.user.email %>
+            </span>
+
+              <%= comment.message %>
+          </div>
+        <% end %>
+
+        <h4>Add a comment</h4>
+        
+        <%= simple_form_for Comment.new, url: moment_comments_path(moment) do |f| %>
+          <%= f.input :message %>
+          <%= f.submit 'Add Comment', class: 'my-btn' %>
+        <% end %>
+      </div>
+
+    </div>
+  <% end %>
+</div>
