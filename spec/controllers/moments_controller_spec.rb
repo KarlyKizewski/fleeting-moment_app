@@ -1,5 +1,35 @@
 require 'rails_helper'
 
+RSpec.describe CommentsController, type: :controller do
+  describe "comments#create action" do
+    it "should allow users to create comments on moment" do
+      moment = FactoryBot.create(:moment)
+
+      user = FactoryBot.create(:user)
+      sign_in user
+
+      post :create, params: { moment_id: moment.id, comment: { message: 'awesome pic!' } }
+
+      expect(response).to redirect_to root_path
+      expect(moment.comments.length).to eq 1
+      expect(moment.comments.first.message).to eq "awesome pic!"
+    end
+
+    it "should require a user to be logged in to comment on a moment" do
+      moment = FactoryBot.create(:moment)
+      post :create, params: { moment_id: moment.id, comment: { message: 'awesome pic!' } }
+      expect(response).to redirect_to new_user_session_path
+    end
+
+    it "should return http status code of not found if the moment isn't found" do
+      user = FactoryBot.create(:user)
+      sign_in user
+      post :create, params: { moment_id: 'YOLO', comment: { message: 'awesome pic!' } }
+      expect(response).to have_http_status :not_found
+    end
+  end
+end
+
 RSpec.describe MomentsController, type: :controller do
 
   describe "moments#destroy action" do
